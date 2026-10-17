@@ -3,165 +3,195 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VividMesh AI - 3D, Video & Image Studio</title>
+  <title>VividMesh AI</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- Supabase Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="nav-left">
-      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-      <div class="logo">⚡ VividMesh AI</div>
-    </div>
-    <div class="nav-right">
-      <select id="currencySelect" onchange="updateCurrency(this.value)">
-        <option value="ZAR">🇿🇦 ZAR (R)</option>
-        <option value="USD">🇺🇸 USD ($)</option>
-        <option value="EUR">🇪🇺 EUR (€)</option>
-        <option value="GBP">🇬🇧 GBP (£)</option>
-      </select>
-      <button class="btn-auth" id="authBtn" onclick="handleGoogleAuth()">Google Sign In</button>
-    </div>
-  </nav>
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">⚡ VividMesh AI</div>
+    <button id="auth-btn" class="auth-btn" onclick="handleGoogleAuth()">Google Sign In</button>
+  </header>
 
-  <!-- Slide-out Sidebar Navigation -->
+  <!-- Sliding Sidebar Navigation -->
   <aside id="sidebar" class="sidebar">
     <div class="sidebar-header">
-      <h3>Menu Navigation</h3>
-      <button class="close-btn" onclick="toggleMenu()">×</button>
+      <h2>Menu</h2>
+      <button class="close-btn" onclick="toggleMenu()">✕</button>
     </div>
-    <ul class="sidebar-links">
-      <li><a href="#" onclick="showPage('create'); toggleMenu();">🎨 Create Studio</a></li>
-      <li><a href="#" onclick="showPage('pricing'); toggleMenu();">💎 Subscription Plans</a></li>
-      <li><a href="#" onclick="showPage('assets'); toggleMenu();">📁 My Saved Assets</a></li>
-    </ul>
+    <nav class="sidebar-nav">
+      <button onclick="showPage('create')">🎨 Create</button>
+      <button onclick="showPage('assets')">📁 Assets</button>
+      <button onclick="showPage('subscriptions')">💎 Subscriptions</button>
+    </nav>
   </aside>
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
+  <!-- Main Content Container -->
   <main class="container">
 
-    <!-- PAGE 1: CREATE STUDIO -->
+    <!-- PAGE 1: CREATE -->
     <section id="page-create" class="page-content active">
-      <div class="hero">
-        <h1>AI Creation Hub</h1>
-        <p>Turn text or images into detailed 3D models, videos, and pictures.</p>
+      <h1 class="title">AI Creation Hub</h1>
+
+      <!-- Top Type Selector Tabs -->
+      <div class="tab-group">
+        <button id="tab-video" class="tab-btn active" onclick="switchCreateMode('video')">📹 Video</button>
+        <button id="tab-image" class="tab-btn" onclick="switchCreateMode('image')">🖼️ Image</button>
+        <button id="tab-3d" class="tab-btn" onclick="switchCreateMode('3d')">📦 3D Model</button>
       </div>
 
-      <div class="workspace">
-        <div class="control-panel">
-          <label>1. Select Mode</label>
-          <select id="toolMode" onchange="changeToolMode(this.value)">
-            <option value="3d">📦 3D Mesh Generator (3/day free)</option>
-            <option value="video">🎥 Image/Text to Video (7/day free)</option>
-            <option value="image">🖼️ AI Image Generator (10/day free)</option>
-          </select>
+      <!-- Settings Panel per Mode -->
+      <div class="settings-panel">
+        
+        <!-- Video Options -->
+        <div id="opts-video" class="mode-opts">
+          <label>Duration:</label>
+          <div class="opt-buttons" id="video-duration">
+            <button class="opt-btn" onclick="selectOpt('video-duration', this)">5s</button>
+            <button class="opt-btn active" onclick="selectOpt('video-duration', this)">8s</button>
+            <button class="opt-btn" onclick="selectOpt('video-duration', this)">10s</button>
+          </div>
 
-          <label>2. Upload Reference Image (Optional for Image-to-3D/Video)</label>
-          <input type="file" id="imageInput" accept="image/*">
+          <label>Resolution:</label>
+          <div class="opt-buttons" id="video-res">
+            <button class="opt-btn active" onclick="selectOpt('video-res', this)">720p</button>
+            <button class="opt-btn" onclick="selectOpt('video-res', this)">1080p</button>
+          </div>
 
-          <label>3. Creative Text Prompt</label>
-          <textarea id="promptInput" placeholder="Describe what you want to generate in high detail..."></textarea>
-
-          <button class="btn-primary" onclick="triggerAdAndGenerate()">🎬 Watch Short Ad & Generate</button>
+          <label>Aspect Ratio:</label>
+          <div class="opt-buttons" id="video-aspect">
+            <button class="opt-btn active" onclick="selectOpt('video-aspect', this)">16:9</button>
+            <button class="opt-btn" onclick="selectOpt('video-aspect', this)">9:16</button>
+            <button class="opt-btn" onclick="selectOpt('video-aspect', this)">1:1</button>
+          </div>
         </div>
 
-        <div class="preview-panel">
-          <div id="previewBox" class="preview-placeholder">Output Preview Screen</div>
-          <button class="btn-success" onclick="triggerAdAndDownload()">🎬 Watch Short Ad & Download Output</button>
+        <!-- Image Options -->
+        <div id="opts-image" class="mode-opts hidden">
+          <label>Aspect Ratio:</label>
+          <div class="opt-buttons" id="image-aspect">
+            <button class="opt-btn active" onclick="selectOpt('image-aspect', this)">16:9</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">9:16</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">1:1</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">4:3</button>
+          </div>
+
+          <label>Quality:</label>
+          <div class="opt-buttons" id="image-quality">
+            <button class="opt-btn active" onclick="selectOpt('image-quality', this)">Standard</button>
+            <button class="opt-btn" onclick="selectOpt('image-quality', this)">HD 4K</button>
+          </div>
         </div>
+
+        <!-- 3D Options -->
+        <div id="opts-3d" class="mode-opts hidden">
+          <label>Format:</label>
+          <div class="opt-buttons" id="3d-format">
+            <button class="opt-btn active" onclick="selectOpt('3d-format', this)">GLB</button>
+            <button class="opt-btn" onclick="selectOpt('3d-format', this)">OBJ</button>
+            <button class="opt-btn" onclick="selectOpt('3d-format', this)">USDZ</button>
+          </div>
+
+          <label>Texture Detail:</label>
+          <div class="opt-buttons" id="3d-texture">
+            <button class="opt-btn active" onclick="selectOpt('3d-texture', this)">Standard</button>
+            <button class="opt-btn" onclick="selectOpt('3d-texture', this)">High Poly</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Upload Reference Image -->
+      <div class="form-group">
+        <label>Upload Reference Image (Optional):</label>
+        <input type="file" id="imageInput" accept="image/*" class="file-input">
+      </div>
+
+      <!-- Text Prompt -->
+      <div class="form-group">
+        <label>Creative Text Prompt:</label>
+        <textarea id="promptInput" placeholder="Describe what you want to generate in detail..."></textarea>
+      </div>
+
+      <!-- Clean Action Button -->
+      <button class="primary-btn" onclick="triggerAdAndGenerate()">✨ Generate</button>
+
+      <!-- Preview Screen -->
+      <div id="outputPreview" class="preview-box">Output Preview Screen</div>
+
+      <button class="secondary-btn" onclick="triggerAdAndDownload()">📥 Download</button>
+    </section>
+
+    <!-- PAGE 2: ASSETS -->
+    <section id="page-assets" class="page-content">
+      <h1 class="title">Your Saved Assets</h1>
+      <div id="assetsGrid" class="assets-grid">
+        <p class="placeholder-text">Loading your assets...</p>
       </div>
     </section>
 
-    <!-- PAGE 2: SUBSCRIPTION PLANS -->
-    <section id="page-pricing" class="page-content">
-      <div class="hero">
-        <h1>Choose Your Plan</h1>
-        <p>No ads, unlimited daily limits, and endless 3D model exports!</p>
+    <!-- PAGE 3: SUBSCRIPTIONS -->
+    <section id="page-subscriptions" class="page-content">
+      <h1 class="title">Choose Your Plan</h1>
+
+      <!-- Currency Switcher at top of Subscription page -->
+      <div class="currency-selector-box">
+        <label for="subscription-currency">Select Currency:</label>
+        <select id="subscription-currency" onchange="updateCurrency(this.value)">
+          <option value="ZAR">🇿🇦 ZAR (R)</option>
+          <option value="USD" selected>🇺🇸 USD ($)</option>
+          <option value="EUR">🇪🇺 EUR (€)</option>
+          <option value="GBP">🇬🇧 GBP (£)</option>
+        </select>
       </div>
 
       <div class="pricing-grid">
-        <div class="card">
-          <h3>Free Tier</h3>
-          <div class="price" id="price-free">R0 <span>/forever</span></div>
+        <div class="price-card">
+          <h3>Free Plan</h3>
+          <p class="price" id="price-free">$0 <span>/forever</span></p>
           <ul>
-            <li>📺 Watch Ads to Generate & Download</li>
-            <li>✅ 10 Images / day</li>
-            <li>✅ 7 Videos / day</li>
-            <li>✅ 3 3D Models / day</li>
-            <li>🔒 <strong>2 3D Model Exports (Lifetime Limit)</strong></li>
+            <li>Standard Generations</li>
+            <li>Ad-supported</li>
           </ul>
-          <button class="btn-outline" disabled>Current Free Tier</button>
         </div>
 
-        <div class="card popular">
-          <div class="badge">Most Popular</div>
-          <h3>Creator Tier</h3>
-          <div class="price" id="price-creator">R160 <span>/month</span></div>
+        <div class="price-card highlight">
+          <h3>Creator Plan</h3>
+          <p class="price" id="price-creator">$9 <span>/month</span></p>
           <ul>
-            <li>⚡ Zero Ads</li>
-            <li>✅ 500 Images / month</li>
-            <li>✅ 50 Videos / month</li>
-            <li>✅ 50 3D Model Exports / month</li>
+            <li>Fast Priority Queue</li>
+            <li>No Ads</li>
           </ul>
-          <button class="btn-primary" onclick="initiatePayment('creator')">Upgrade to Creator</button>
+          <button class="plan-btn" onclick="initiatePayment('creator')">Upgrade</button>
         </div>
 
-        <div class="card">
-          <h3>Pro Tier</h3>
-          <div class="price" id="price-pro">R340 <span>/month</span></div>
+        <div class="price-card">
+          <h3>Pro Plan</h3>
+          <p class="price" id="price-pro">$19 <span>/month</span></p>
           <ul>
-            <li>⚡ Zero Ads</li>
-            <li>✅ Unlimited Images</li>
-            <li>✅ 150 Videos / month</li>
-            <li>✅ 200 3D Model Exports / month</li>
+            <li>High-Res 4K Exports</li>
+            <li>Commercial License</li>
           </ul>
-          <button class="btn-primary" onclick="initiatePayment('pro')">Upgrade to Pro</button>
+          <button class="plan-btn" onclick="initiatePayment('pro')">Upgrade</button>
         </div>
-
-        <div class="card">
-          <h3>Studio Tier</h3>
-          <div class="price" id="price-studio">R880 <span>/month</span></div>
-          <ul>
-            <li>⚡ Zero Ads</li>
-            <li>✅ <strong>Unlimited Everything</strong></li>
-            <li>✅ <strong>Unlimited 3D Model Exports</strong></li>
-            <li>✅ Priority GPU Processing</li>
-          </ul>
-          <button class="btn-primary" onclick="initiatePayment('studio')">Upgrade to Studio</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- PAGE 3: MY SAVED ASSETS GALLERY -->
-    <section id="page-assets" class="page-content">
-      <div class="hero">
-        <h1>My Assets Gallery</h1>
-        <p>All your past generated 3D models, videos, and images saved to your Google account.</p>
-      </div>
-
-      <div id="assetsGrid" class="assets-grid">
-        <div class="asset-card-placeholder">Please sign in with Google to view your saved creations!</div>
       </div>
     </section>
 
   </main>
 
-  <!-- SPONSORED AD POPUP MODAL -->
-  <div id="adModal" class="modal-overlay">
+  <!-- Ad Modal -->
+  <div id="adModal" class="modal">
     <div class="modal-content">
-      <h3>Sponsored Advertisement</h3>
-      <p>Watch this ad to unlock your generation/download...</p>
-      <div class="ad-box">
-        <!-- Google AdSense Tag Goes Here -->
-        <p>[ Google AdSense / Sponsor Video Ad Unit ]</p>
-      </div>
-      <div id="adTimer">Unlocking in <span id="timerCount">5</span>s...</div>
+      <h3>Sponsored Ad</h3>
+      <p>Your generation will start after <span id="timerCount">5</span>s...</p>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
+              
