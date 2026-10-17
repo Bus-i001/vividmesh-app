@@ -1,0 +1,65 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: #0b0f19; color: #f1f5f9; min-height: 100vh; }
+
+.navbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.8rem 1.2rem; background: #1e293b; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.nav-left, .nav-right { display: flex; align-items: center; gap: 0.8rem; }
+.menu-toggle { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+.logo { font-weight: 700; font-size: 1.1rem; color: #6366f1; }
+
+select, input, textarea {
+  background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.6rem; border-radius: 8px; width: 100%;
+}
+
+.btn-auth {
+  background: #6366f1; color: #fff; border: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.8rem;
+}
+
+/* Slide-out Sidebar */
+.sidebar {
+  position: fixed; top: 0; left: -260px; width: 250px; height: 100%; background: #0f172a; z-index: 200; transition: left 0.3s ease; padding: 1rem; border-right: 1px solid rgba(255,255,255,0.1);
+}
+.sidebar.active { left: 0; }
+.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.close-btn { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+.sidebar-links { list-style: none; }
+.sidebar-links li { margin-bottom: 1rem; }
+.sidebar-links a { color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 1rem; }
+
+.container { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem; }
+.page-content { display: none; }
+.page-content.active { display: block; }
+
+.hero { text-align: center; margin-bottom: 1.5rem; }
+.hero h1 { font-size: 1.8rem; margin-bottom: 0.4rem; }
+.hero p { color: #94a3b8; font-size: 0.9rem; }
+
+.workspace { display: grid; grid-template-columns: 1fr; gap: 1.5rem; background: #1e293b; padding: 1.5rem; border-radius: 16px; }
+@media (min-width: 768px) { .workspace { grid-template-columns: 1fr 1fr; } }
+
+.control-panel { display: flex; flex-direction: column; gap: 0.8rem; }
+textarea { height: 80px; resize: none; }
+
+.btn-primary { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.btn-success { background: #10b981; color: #fff; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 1rem; }
+
+.preview-placeholder { width: 100%; height: 200px; background: #0f172a; border: 2px dashed rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #64748b; text-align: center; }
+
+/* Pricing Cards */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.card { background: #1e293b; border-radius: 16px; padding: 1.2rem; display: flex; flex-direction: column; position: relative; }
+.card.popular { border: 2px solid #6366f1; }
+.badge { position: absolute; top: -10px; right: 15px; background: #6366f1; font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 10px; font-weight: bold; }
+.price { font-size: 1.5rem; font-weight: 700; margin: 0.6rem 0; }
+.price span { font-size: 0.75rem; color: #64748b; }
+.card ul { list-style: none; margin-bottom: 1rem; flex-grow: 1; }
+.card li { font-size: 0.8rem; margin-bottom: 0.4rem; color: #cbd5e1; }
+.btn-outline { background: none; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0.6rem; border-radius: 8px; }
+
+/* Ad Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: #1e293b; padding: 1.5rem; border-radius: 16px; text-align: center; max-width: 350px; width: 90%; }
+.ad-box { width: 100%; height: 150px; background: #0f172a; border: 1px dashed #6366f1; margin: 1rem 0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.8rem; }
+.assets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
