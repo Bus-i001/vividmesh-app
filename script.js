@@ -10,6 +10,13 @@ let currentCurrency = 'USD';
 let userSession = null;
 let pendingAction = null;
 
+// SELECTED OPTIONS STATE
+let selectedOptions = {
+  video: { duration: '8s', res: '720p', aspect: '16:9' },
+  image: { aspect: '16:9', quality: 'Standard' },
+  '3d': { format: 'GLB', texture: 'Standard' }
+};
+
 // PRICES MATRIX
 const prices = {
   ZAR: { free: 'R0', creator: 'R160', pro: 'R340' },
@@ -43,11 +50,12 @@ function switchCreateMode(mode) {
   document.getElementById(`opts-${mode}`).classList.remove('hidden');
 }
 
-// OPTION BUTTON SELECTOR (e.g., 8s, 1080p, 16:9)
-function selectOpt(groupId, el) {
+// OPTION BUTTON SELECTOR (Saves state and highlights button)
+function selectOpt(groupId, key, value, el) {
   const container = document.getElementById(groupId);
   container.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
+  selectedOptions[currentMode][key] = value;
 }
 
 // UPDATE CURRENCY DISPLAY ON SUBSCRIPTION PAGE
@@ -99,14 +107,15 @@ function showAdModal() {
 async function executeSecureAction() {
   const preview = document.getElementById('outputPreview');
   const prompt = document.getElementById('promptInput').value || 'Default generation';
+  const options = selectedOptions[currentMode];
 
   if (pendingAction === 'generate') {
-    preview.innerHTML = `<p style="color: #60a5fa;">Processing ${currentMode.toUpperCase()} request via Secure Server...</p>`;
+    preview.innerHTML = `<p style="color: #60a5fa;">Processing ${currentMode.toUpperCase()} (${JSON.stringify(options)}) via Secure Server...</p>`;
     try {
       const response = await fetch(`${BACKEND_URL}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: currentMode, prompt, userId: userSession?.user?.id || 'guest' })
+        body: JSON.stringify({ mode: currentMode, options, prompt, userId: userSession?.user?.id || 'guest' })
       });
       const data = await response.json();
       preview.innerHTML = `<p style="color: #10b981;">Generated ${currentMode.toUpperCase()} Output Ready!</p>`;
@@ -120,5 +129,5 @@ async function executeSecureAction() {
 
 function initiatePayment(plan) {
   alert(`Redirecting to secure checkout for ${plan.toUpperCase()} plan (${prices[currentCurrency][plan]})...`);
-    }
-    
+          }
+  
