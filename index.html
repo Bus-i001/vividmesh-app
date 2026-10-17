@@ -51,22 +51,22 @@
         <div id="opts-video" class="mode-opts">
           <label>Duration:</label>
           <div class="opt-buttons" id="video-duration">
-            <button class="opt-btn" onclick="selectOpt('video-duration', this)">5s</button>
-            <button class="opt-btn active" onclick="selectOpt('video-duration', this)">8s</button>
-            <button class="opt-btn" onclick="selectOpt('video-duration', this)">10s</button>
+            <button class="opt-btn" onclick="selectOpt('video-duration', 'duration', '5s', this)">5s</button>
+            <button class="opt-btn active" onclick="selectOpt('video-duration', 'duration', '8s', this)">8s</button>
+            <button class="opt-btn" onclick="selectOpt('video-duration', 'duration', '10s', this)">10s</button>
           </div>
 
           <label>Resolution:</label>
           <div class="opt-buttons" id="video-res">
-            <button class="opt-btn active" onclick="selectOpt('video-res', this)">720p</button>
-            <button class="opt-btn" onclick="selectOpt('video-res', this)">1080p</button>
+            <button class="opt-btn active" onclick="selectOpt('video-res', 'res', '720p', this)">720p</button>
+            <button class="opt-btn" onclick="selectOpt('video-res', 'res', '1080p', this)">1080p</button>
           </div>
 
           <label>Aspect Ratio:</label>
           <div class="opt-buttons" id="video-aspect">
-            <button class="opt-btn active" onclick="selectOpt('video-aspect', this)">16:9</button>
-            <button class="opt-btn" onclick="selectOpt('video-aspect', this)">9:16</button>
-            <button class="opt-btn" onclick="selectOpt('video-aspect', this)">1:1</button>
+            <button class="opt-btn active" onclick="selectOpt('video-aspect', 'aspect', '16:9', this)">16:9</button>
+            <button class="opt-btn" onclick="selectOpt('video-aspect', 'aspect', '9:16', this)">9:16</button>
+            <button class="opt-btn" onclick="selectOpt('video-aspect', 'aspect', '1:1', this)">1:1</button>
           </div>
         </div>
 
@@ -74,16 +74,16 @@
         <div id="opts-image" class="mode-opts hidden">
           <label>Aspect Ratio:</label>
           <div class="opt-buttons" id="image-aspect">
-            <button class="opt-btn active" onclick="selectOpt('image-aspect', this)">16:9</button>
-            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">9:16</button>
-            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">1:1</button>
-            <button class="opt-btn" onclick="selectOpt('image-aspect', this)">4:3</button>
+            <button class="opt-btn active" onclick="selectOpt('image-aspect', 'aspect', '16:9', this)">16:9</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', 'aspect', '9:16', this)">9:16</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', 'aspect', '1:1', this)">1:1</button>
+            <button class="opt-btn" onclick="selectOpt('image-aspect', 'aspect', '4:3', this)">4:3</button>
           </div>
 
           <label>Quality:</label>
           <div class="opt-buttons" id="image-quality">
-            <button class="opt-btn active" onclick="selectOpt('image-quality', this)">Standard</button>
-            <button class="opt-btn" onclick="selectOpt('image-quality', this)">HD 4K</button>
+            <button class="opt-btn active" onclick="selectOpt('image-quality', 'quality', 'Standard', this)">Standard</button>
+            <button class="opt-btn" onclick="selectOpt('image-quality', 'quality', 'HD 4K', this)">HD 4K</button>
           </div>
         </div>
 
@@ -91,15 +91,15 @@
         <div id="opts-3d" class="mode-opts hidden">
           <label>Format:</label>
           <div class="opt-buttons" id="3d-format">
-            <button class="opt-btn active" onclick="selectOpt('3d-format', this)">GLB</button>
-            <button class="opt-btn" onclick="selectOpt('3d-format', this)">OBJ</button>
-            <button class="opt-btn" onclick="selectOpt('3d-format', this)">USDZ</button>
+            <button class="opt-btn active" onclick="selectOpt('3d-format', 'format', 'GLB', this)">GLB</button>
+            <button class="opt-btn" onclick="selectOpt('3d-format', 'format', 'OBJ', this)">OBJ</button>
+            <button class="opt-btn" onclick="selectOpt('3d-format', 'format', 'USDZ', this)">USDZ</button>
           </div>
 
           <label>Texture Detail:</label>
           <div class="opt-buttons" id="3d-texture">
-            <button class="opt-btn active" onclick="selectOpt('3d-texture', this)">Standard</button>
-            <button class="opt-btn" onclick="selectOpt('3d-texture', this)">High Poly</button>
+            <button class="opt-btn active" onclick="selectOpt('3d-texture', 'texture', 'Standard', this)">Standard</button>
+            <button class="opt-btn" onclick="selectOpt('3d-texture', 'texture', 'High Poly', this)">High Poly</button>
           </div>
         </div>
 
@@ -194,4 +194,4 @@
   <script src="script.js"></script>
 </body>
   </html>
-              
+            
