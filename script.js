@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_gf-avm-Ymj2K_SGimsx-xg_sGbV4fOW";
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 // BACKEND API SERVER (RENDER)
-const BACKEND_URL = "https://your-render-app.onrender.com";
+const BACKEND_URL = "https://vividmesh-backend.onrender.com/api/generate";
 
 // CURRENCY RATES MATRIX
 const prices = {
