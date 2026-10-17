@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VividMesh AI - 3D, Video & Image Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase Client SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <div class="logo">⚡ VividMesh AI</div>
+    </div>
+    <div class="nav-right">
+      <select id="currencySelect" onchange="updateCurrency(this.value)">
+        <option value="ZAR">🇿🇦 ZAR (R)</option>
+        <option value="USD">🇺🇸 USD ($)</option>
+        <option value="EUR">🇪🇺 EUR (€)</option>
+        <option value="GBP">🇬🇧 GBP (£)</option>
+      </select>
+      <button class="btn-auth" id="authBtn" onclick="handleGoogleAuth()">Google Sign In</button>
+    </div>
+  </nav>
+
+  <!-- Slide-out Sidebar Navigation -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h3>Menu Navigation</h3>
+      <button class="close-btn" onclick="toggleMenu()">×</button>
+    </div>
+    <ul class="sidebar-links">
+      <li><a href="#" onclick="showPage('create'); toggleMenu();">🎨 Create Studio</a></li>
+      <li><a href="#" onclick="showPage('pricing'); toggleMenu();">💎 Subscription Plans</a></li>
+      <li><a href="#" onclick="showPage('assets'); toggleMenu();">📁 My Saved Assets</a></li>
+    </ul>
+  </aside>
+
+  <main class="container">
+
+    <!-- PAGE 1: CREATE STUDIO -->
+    <section id="page-create" class="page-content active">
+      <div class="hero">
+        <h1>AI Creation Hub</h1>
+        <p>Turn text or images into detailed 3D models, videos, and pictures.</p>
+      </div>
+
+      <div class="workspace">
+        <div class="control-panel">
+          <label>1. Select Mode</label>
+          <select id="toolMode" onchange="changeToolMode(this.value)">
+            <option value="3d">📦 3D Mesh Generator (3/day free)</option>
+            <option value="video">🎥 Image/Text to Video (7/day free)</option>
+            <option value="image">🖼️ AI Image Generator (10/day free)</option>
+          </select>
+
+          <label>2. Upload Reference Image (Optional for Image-to-3D/Video)</label>
+          <input type="file" id="imageInput" accept="image/*">
+
+          <label>3. Creative Text Prompt</label>
+          <textarea id="promptInput" placeholder="Describe what you want to generate in high detail..."></textarea>
+
+          <button class="btn-primary" onclick="triggerAdAndGenerate()">🎬 Watch Short Ad & Generate</button>
+        </div>
+
+        <div class="preview-panel">
+          <div id="previewBox" class="preview-placeholder">Output Preview Screen</div>
+          <button class="btn-success" onclick="triggerAdAndDownload()">🎬 Watch Short Ad & Download Output</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: SUBSCRIPTION PLANS -->
+    <section id="page-pricing" class="page-content">
+      <div class="hero">
+        <h1>Choose Your Plan</h1>
+        <p>No ads, unlimited daily limits, and endless 3D model exports!</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="card">
+          <h3>Free Tier</h3>
+          <div class="price" id="price-free">R0 <span>/forever</span></div>
+          <ul>
+            <li>📺 Watch Ads to Generate & Download</li>
+            <li>✅ 10 Images / day</li>
+            <li>✅ 7 Videos / day</li>
+            <li>✅ 3 3D Models / day</li>
+            <li>🔒 <strong>2 3D Model Exports (Lifetime Limit)</strong></li>
+          </ul>
+          <button class="btn-outline" disabled>Current Free Tier</button>
+        </div>
+
+        <div class="card popular">
+          <div class="badge">Most Popular</div>
+          <h3>Creator Tier</h3>
+          <div class="price" id="price-creator">R160 <span>/month</span></div>
+          <ul>
+            <li>⚡ Zero Ads</li>
+            <li>✅ 500 Images / month</li>
+            <li>✅ 50 Videos / month</li>
+            <li>✅ 50 3D Model Exports / month</li>
+          </ul>
+          <button class="btn-primary" onclick="initiatePayment('creator')">Upgrade to Creator</button>
+        </div>
+
+        <div class="card">
+          <h3>Pro Tier</h3>
+          <div class="price" id="price-pro">R340 <span>/month</span></div>
+          <ul>
+            <li>⚡ Zero Ads</li>
+            <li>✅ Unlimited Images</li>
+            <li>✅ 150 Videos / month</li>
+            <li>✅ 200 3D Model Exports / month</li>
+          </ul>
+          <button class="btn-primary" onclick="initiatePayment('pro')">Upgrade to Pro</button>
+        </div>
+
+        <div class="card">
+          <h3>Studio Tier</h3>
+          <div class="price" id="price-studio">R880 <span>/month</span></div>
+          <ul>
+            <li>⚡ Zero Ads</li>
+            <li>✅ <strong>Unlimited Everything</strong></li>
+            <li>✅ <strong>Unlimited 3D Model Exports</strong></li>
+            <li>✅ Priority GPU Processing</li>
+          </ul>
+          <button class="btn-primary" onclick="initiatePayment('studio')">Upgrade to Studio</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: MY SAVED ASSETS GALLERY -->
+    <section id="page-assets" class="page-content">
+      <div class="hero">
+        <h1>My Assets Gallery</h1>
+        <p>All your past generated 3D models, videos, and images saved to your Google account.</p>
+      </div>
+
+      <div id="assetsGrid" class="assets-grid">
+        <div class="asset-card-placeholder">Please sign in with Google to view your saved creations!</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SPONSORED AD POPUP MODAL -->
+  <div id="adModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Sponsored Advertisement</h3>
+      <p>Watch this ad to unlock your generation/download...</p>
+      <div class="ad-box">
+        <!-- Google AdSense Tag Goes Here -->
+        <p>[ Google AdSense / Sponsor Video Ad Unit ]</p>
+      </div>
+      <div id="adTimer">Unlocking in <span id="timerCount">5</span>s...</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
