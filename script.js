@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_gf-avm-Ymj2K_SGimsx-xg_sGbV4fOW";
 const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 // BACKEND API SERVER (RENDER)
-const BACKEND_URL = "https://vividmesh-backend.onrender.com/api/generate";
+const BACKEND_URL = "https://vividmesh-backend.onrender.com";
 
 // CURRENCY RATES MATRIX
 const prices = {
@@ -85,7 +85,8 @@ async function executeSecureAction() {
   const mode = document.getElementById('toolMode').value;
   const prompt = document.getElementById('promptInput').value || 'Default creation';
   const preview = document.getElementById('previewBox');
-
+const response = await fetch(`${BACKEND_URL}/api/generate`, { ... });
+  
   if(pendingAction === 'generate') {
     preview.innerHTML = `<p style="color: #6366f1;">Processing ${mode.toUpperCase()} via Secure Cloud Server...</p>`;
     
