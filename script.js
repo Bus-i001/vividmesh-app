@@ -1,3 +1,5 @@
+console.log("VividMesh script loaded successfully!");
+alert("Script is working!");
 // SUPABASE & BACKEND CONFIG
 const SUPABASE_URL = "https://afnmwv1thjbxwoafumc.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_gf-avm-Ymj2K_S6imsx-xg_sGbV4fOW";
