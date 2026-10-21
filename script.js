@@ -1,9 +1,10 @@
 console.log("VividMesh script loaded successfully!");
 alert("Script is working!");
+
 // SUPABASE & BACKEND CONFIG
 const SUPABASE_URL = "https://afnmwv1thjbxwoafumc.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_gf-avm-Ymj2K_S6imsx-xg_sGbV4fOW";
-const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const BACKEND_URL = "https://vividmesh-backend.onrender.com";
 
@@ -38,7 +39,7 @@ function toggleMenu() {
 // SWITCH PAGE (Create, Assets, Subscriptions)
 function showPage(pageId) {
   document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-  document.getElementById(`page-${pageId}`).classList.add('active');
+  document.getElementById('page-' + pageId).classList.add('active');
   toggleMenu();
 }
 
@@ -46,13 +47,13 @@ function showPage(pageId) {
 function switchCreateMode(mode) {
   currentMode = mode;
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.getElementById(`tab-${mode}`).classList.add('active');
+  document.getElementById('tab-' + mode).classList.add('active');
 
   document.querySelectorAll('.mode-opts').forEach(opt => opt.classList.add('hidden'));
-  document.getElementById(`opts-${mode}`).classList.remove('hidden');
+  document.getElementById('opts-' + mode).classList.remove('hidden');
 }
 
-// OPTION BUTTON SELECTOR (Saves state and highlights button)
+// OPTION BUTTON SELECTOR (saves choice and highlights button)
 function selectOpt(groupId, key, value, el) {
   const container = document.getElementById(groupId);
   container.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
@@ -63,19 +64,19 @@ function selectOpt(groupId, key, value, el) {
 // UPDATE CURRENCY DISPLAY ON SUBSCRIPTION PAGE
 function updateCurrency(curr) {
   currentCurrency = curr;
-  document.getElementById('price-free').innerHTML = `${prices[curr].free} <span>/forever</span>`;
-  document.getElementById('price-creator').innerHTML = `${prices[curr].creator} <span>/month</span>`;
-  document.getElementById('price-pro').innerHTML = `${prices[curr].pro} <span>/month</span>`;
+  document.getElementById('price-free').innerHTML = prices[curr].free + ' <span>/forever</span>';
+  document.getElementById('price-creator').innerHTML = prices[curr].creator + ' <span>/month</span>';
+  document.getElementById('price-pro').innerHTML = prices[curr].pro + ' <span>/month</span>';
 }
 
 // GOOGLE SIGN IN
 async function handleGoogleAuth() {
-  if (!supabase) return alert("Database connecting...");
-  const { data, error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+  if (!supabaseClient) return alert("Database connecting...");
+  const { data, error } = await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
   if (error) alert("Sign in error: " + error.message);
 }
 
-// AD TRIGGER BEFORE ACTION
+// AD TRIGGERS BEFORE ACTION
 function triggerAdAndGenerate() {
   pendingAction = 'generate';
   showAdModal();
@@ -89,8 +90,9 @@ function triggerAdAndDownload() {
 function showAdModal() {
   const modal = document.getElementById('adModal');
   const timerElem = document.getElementById('timerCount');
-  let timeLeft = 5;
+  if (modal.style.display === 'flex') return; // already showing
 
+  let timeLeft = 5;
   modal.style.display = 'flex';
   timerElem.innerText = timeLeft;
 
@@ -112,17 +114,22 @@ async function executeSecureAction() {
   const options = selectedOptions[currentMode];
 
   if (pendingAction === 'generate') {
-    preview.innerHTML = `<p style="color: #60a5fa;">Processing ${currentMode.toUpperCase()} (${JSON.stringify(options)}) via Secure Server...</p>`;
+    preview.innerHTML = '<p style="color: #60a5fa;">Processing ' + currentMode.toUpperCase() + ' (' + JSON.stringify(options) + ')...</p>';
     try {
-      const response = await fetch(`${BACKEND_URL}/api/generate`, {
+      const response = await fetch(BACKEND_URL + '/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: currentMode, options, prompt, userId: userSession?.user?.id || 'guest' })
+        body: JSON.stringify({
+          mode: currentMode,
+          options: options,
+          prompt: prompt,
+          userId: (userSession && userSession.user && userSession.user.id) || 'guest'
+        })
       });
       const data = await response.json();
-      preview.innerHTML = `<p style="color: #10b981;">Generated ${currentMode.toUpperCase()} Output Ready!</p>`;
+      preview.innerHTML = '<p style="color: #10b981;">Generated ' + currentMode.toUpperCase() + ' Output Ready!</p>';
     } catch (err) {
-      preview.innerHTML = `<p style="color: #f87171;">Demo Output generated for: "${prompt}"</p>`;
+      preview.innerHTML = '<p style="color: #f87171;">Demo Output generated for: "' + prompt + '"</p>';
     }
   } else {
     alert("Download started!");
@@ -130,6 +137,5 @@ async function executeSecureAction() {
 }
 
 function initiatePayment(plan) {
-  alert(`Redirecting to secure checkout for ${plan.toUpperCase()} plan (${prices[currentCurrency][plan]})...`);
-          }
-  
+  alert('Redirecting to secure checkout for ' + plan.toUpperCase() + ' plan (' + prices[currentCurrency][plan] + ')...');
+    }
