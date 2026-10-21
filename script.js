@@ -138,4 +138,4 @@ async function executeSecureAction() {
 
 function initiatePayment(plan) {
   alert('Redirecting to secure checkout for ' + plan.toUpperCase() + ' plan (' + prices[currentCurrency][plan] + ')...');
-    }
+  }
