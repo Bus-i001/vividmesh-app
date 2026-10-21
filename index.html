@@ -1,11 +1,10 @@
-<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VividMesh AI</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -29,6 +28,7 @@
       <button onclick="showPage('subscriptions')">💎 Subscriptions</button>
     </nav>
   </aside>
+
   <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
   <!-- Main Content Container -->
@@ -40,14 +40,14 @@
 
       <!-- Top Type Selector Tabs -->
       <div class="tab-group">
-        <button id="tab-video" class="tab-btn active" onclick="switchCreateMode('video')">📹 Video</button>
+        <button id="tab-video" class="tab-btn active" onclick="switchCreateMode('video')">🎬 Video</button>
         <button id="tab-image" class="tab-btn" onclick="switchCreateMode('image')">🖼️ Image</button>
         <button id="tab-3d" class="tab-btn" onclick="switchCreateMode('3d')">📦 3D Model</button>
       </div>
 
       <!-- Settings Panel per Mode -->
       <div class="settings-panel">
-        
+
         <!-- Video Options -->
         <div id="opts-video" class="mode-opts">
           <label>Duration:</label>
@@ -118,7 +118,7 @@
         <textarea id="promptInput" placeholder="Describe what you want to generate in detail..."></textarea>
       </div>
 
-      <!-- Clean Action Button -->
+      <!-- Action Button -->
       <button class="primary-btn" onclick="triggerAdAndGenerate()">✨ Generate</button>
 
       <!-- Preview Screen -->
@@ -139,7 +139,7 @@
     <section id="page-subscriptions" class="page-content">
       <h1 class="title">Choose Your Plan</h1>
 
-      <!-- Currency Switcher at top of Subscription page -->
+      <!-- Currency Switcher -->
       <div class="currency-selector-box">
         <label for="subscription-currency">Select Currency:</label>
         <select id="subscription-currency" onchange="updateCurrency(this.value)">
@@ -174,7 +174,7 @@
           <h3>Pro Plan</h3>
           <p class="price" id="price-pro">$19 <span>/month</span></p>
           <ul>
-            <li>High-Res 4K Exports</li>
+            <li>High-Res 4K Images</li>
             <li>Commercial License</li>
           </ul>
           <button class="plan-btn" onclick="initiatePayment('pro')">Upgrade</button>
@@ -192,7 +192,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 </body>
-  </html>
-            
+              </html>
