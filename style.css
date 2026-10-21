@@ -104,10 +104,11 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
+  pointer-events: none; /* Add this line */
 }
-
 .overlay.active {
   display: block;
+  pointer-events: auto; /* Add this line */
 }
 
 /* Main Container & Page Navigation */
@@ -126,7 +127,7 @@ body {
 }
 
 .title {
-  text-align: center;
+  text-align: center
   font-size: 22px;
   margin-bottom: 16px;
 }
